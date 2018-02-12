@@ -1,19 +1,20 @@
 {
-  "name": "@weknow/react-data-report",
-  "version": "1.1.1",
-  "description": "ReactJS component to preview data and export it as PDF file.",
+  "name": "@weknow/react-bubble-chart-d3",
+  "version": "1.0.0",
+  "description": "ReactJS component to display data as a bubble chart using D3.",
   "keywords": [
     "ReactJS",
     "Component",
-    "PDF",
-    "Reports",
-    "Preview"
+    "D3",
+    "Charts",
+    "Bubble",
+    "Graphics"
   ],
   "author": "weKnow Inc",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/weknowinc/react-data-report"
+    "url": "https://github.com/weknowinc/react-bubble-chart-d3"
   },
   "main": "build/react-bubble-chart-d3.js",
   "peerDependencies": {
