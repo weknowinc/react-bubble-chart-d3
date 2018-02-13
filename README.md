@@ -5,7 +5,7 @@ ReactJS component to display data as a bubble chart using d3.
 
 As you will be able to see in [test](test/src/App.js) in order to use the component we need to importe it as:
 ```JAVASCRIPT
-import BubbleChart from 'react-bubble-chart-d3';
+import BubbleChart from '@weknow/react-bubble-chart-d3';
 ```
 
 Then, in the render method we can just call it like:
