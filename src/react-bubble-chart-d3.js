@@ -42,7 +42,6 @@ export default class BubbleChart extends Component {
       data,
       height,
       width,
-      font,
     } = this.props;
     // Reset the svg element to a empty state.
     this.svg.innerHTML = '';
@@ -78,7 +77,7 @@ export default class BubbleChart extends Component {
   renderBubbles(nodes, color) {
     const {
       data,
-      font,
+      valueFont,
     } = this.props;
     const bubbleChart = d3.select(this.svg).append("g")
       .attr("class", "bubble-chart");
@@ -101,14 +100,14 @@ export default class BubbleChart extends Component {
 
     node.append("text")
       .attr("class", "value-text")
-      .style("font-size", `${font.size}px`)
+      .style("font-size", `${valueFont.size}px`)
       .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
       .style("font-weight", (d) => {
-        return font.weight ? font.weight : 600;
+        return valueFont.weight ? valueFont.weight : 600;
       })
-      .style("font-family", font.family)
+      .style("font-family", valueFont.family)
       .style("fill", () => {
-        return font.color ? font.color : '#000';
+        return valueFont.color ? valueFont.color : '#000';
       })
       .text(function(d) { return d.value; });
 
@@ -119,7 +118,7 @@ export default class BubbleChart extends Component {
       return -(width/2);
     })
     .attr("y", function(d) {
-      return (font.size/2);
+      return (valueFont.size/3);
     })
 
     node.append("title")
@@ -129,7 +128,7 @@ export default class BubbleChart extends Component {
   renderLegend(width, height, offset, nodes, color) {
     const {
       data,
-      font,
+      legendFont,
     } = this.props;
     const bubble = d3.select('.bubble-chart');
     const bubbleHeight = bubble.node().getBBox().height;
@@ -145,27 +144,27 @@ export default class BubbleChart extends Component {
     .append("g")
       .attr("transform", (d, i) => {
         const offset = textOffset;
-        textOffset+= font.size + 10;
+        textOffset+= legendFont.size + 10;
         return `translate(0,${offset})`;
       });
 
     texts.append("rect")
-      .attr("width", font.size)
-      .attr("height", font.size)
+      .attr("width", legendFont.size)
+      .attr("height", legendFont.size)
       .attr("x", 0)
-      .attr("y", -font.size)
+      .attr("y", -legendFont.size)
       .style("fill", function(d) { return d.data.color ? d.data.color : color(nodes.indexOf(d)); });
 
     texts.append("text")
-      .style("font-size", `${font.size}px`)
+      .style("font-size", `${legendFont.size}px`)
       .style("font-weight", (d) => {
-        return font.weight ? font.weight : 600;
+        return legendFont.weight ? legendFont.weight : 600;
       })
-      .style("font-family", font.family)
+      .style("font-family", legendFont.family)
       .style("fill", () => {
-        return font.color ? font.color : '#000';
+        return legendFont.color ? legendFont.color : '#000';
       })
-      .attr("x", (d) => { return font.size + 10 })
+      .attr("x", (d) => { return legendFont.size + 10 })
       .attr("y", 0)
       .text((d) => { return d.label });
   }
@@ -174,7 +173,13 @@ export default class BubbleChart extends Component {
 BubbleChart.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
-  font: PropTypes.shape({
+  legendFont: PropTypes.shape({
+    family: PropTypes.string,
+    size: PropTypes.number,
+    color: PropTypes.string,
+    weight: PropTypes.string,
+  }),
+  valueFont: PropTypes.shape({
     family: PropTypes.string,
     size: PropTypes.number,
     color: PropTypes.string,
@@ -184,10 +189,16 @@ BubbleChart.propTypes = {
 BubbleChart.defaultProps = {
   width: 1000,
   height: 800,
-  font: {
+  legendFont: {
     family: 'Arial',
     size: 12,
     color: '#000',
+    weight: 'bold',
+  },
+  valueFont: {
+    family: 'Arial',
+    size: 24,
+    color: '#fff',
     weight: 'bold',
   },
 }
