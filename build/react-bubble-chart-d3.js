@@ -13090,7 +13090,6 @@ function(module, exports, __webpack_require__) {
             key: "renderChart",
             value: function() {
                 var _props3 = this.props, data = _props3.data, height = _props3.height, width = _props3.width;
-                _props3.font;
                 // Reset the svg element to a empty state.
                 this.svg.innerHTML = "";
                 var bubblesWidth = .8 * width, legendWidth = width - bubblesWidth, color = d3.scaleOrdinal(d3.schemeCategory20c), pack = d3.pack().size([ bubblesWidth, height ]).padding(0), root = d3.hierarchy({
@@ -13109,7 +13108,7 @@ function(module, exports, __webpack_require__) {
         }, {
             key: "renderBubbles",
             value: function(nodes, color) {
-                var _props4 = this.props, font = (_props4.data, _props4.font), bubbleChart = d3.select(this.svg).append("g").attr("class", "bubble-chart"), node = bubbleChart.selectAll(".node").data(nodes).enter().append("g").attr("class", "node").attr("transform", function(d) {
+                var _props4 = this.props, valueFont = (_props4.data, _props4.valueFont), bubbleChart = d3.select(this.svg).append("g").attr("class", "bubble-chart"), node = bubbleChart.selectAll(".node").data(nodes).enter().append("g").attr("class", "node").attr("transform", function(d) {
                     return "translate(" + d.x + "," + d.y + ")";
                 });
                 node.append("circle").attr("id", function(d) {
@@ -13122,19 +13121,23 @@ function(module, exports, __webpack_require__) {
                     return "clip-" + d.id;
                 }).append("use").attr("xlink:href", function(d) {
                     return "#" + d.id;
-                }), node.append("text").attr("class", "value-text").style("font-size", font.size + "px").attr("clip-path", function(d) {
+                }), node.append("text").attr("class", "value-text").style("font-size", valueFont.size + "px").attr("clip-path", function(d) {
                     return "url(#clip-" + d.id + ")";
                 }).style("font-weight", function(d) {
-                    return font.weight ? font.weight : 600;
-                }).style("font-family", font.family).style("fill", function() {
-                    return font.color ? font.color : "#000";
+                    return valueFont.weight ? valueFont.weight : 600;
+                }).style("font-family", valueFont.family).style("fill", function() {
+                    return valueFont.color ? valueFont.color : "#000";
+                }).style("stroke", function() {
+                    return valueFont.lineColor ? valueFont.lineColor : "#000";
+                }).style("stroke-width", function() {
+                    return valueFont.lineWeight ? valueFont.lineWeight : 0;
                 }).text(function(d) {
                     return d.value;
                 }), // Center the texts inside the circles.
                 d3.selectAll(".value-text").attr("x", function(d) {
                     return -d3.select(this).node().getBBox().width / 2;
                 }).attr("y", function(d) {
-                    return font.size / 2;
+                    return valueFont.size / 3;
                 }), node.append("title").text(function(d) {
                     return d.label;
                 });
@@ -13142,20 +13145,24 @@ function(module, exports, __webpack_require__) {
         }, {
             key: "renderLegend",
             value: function(width, height, offset, nodes, color) {
-                var _props5 = this.props, font = (_props5.data, _props5.font), bubble = d3.select(".bubble-chart"), bubbleHeight = bubble.node().getBBox().height, legend = d3.select(this.svg).append("g").attr("transform", function() {
+                var _props5 = this.props, legendFont = (_props5.data, _props5.legendFont), bubble = d3.select(".bubble-chart"), bubbleHeight = bubble.node().getBBox().height, legend = d3.select(this.svg).append("g").attr("transform", function() {
                     return "translate(" + offset + "," + (height - bubbleHeight) / 2 + ")";
                 }).attr("class", "legend"), textOffset = 0, texts = legend.selectAll(".legend-text").data(nodes).enter().append("g").attr("transform", function(d, i) {
                     var offset = textOffset;
-                    return textOffset += font.size + 10, "translate(0," + offset + ")";
+                    return textOffset += legendFont.size + 10, "translate(0," + offset + ")";
                 });
-                texts.append("rect").attr("width", font.size).attr("height", font.size).attr("x", 0).attr("y", -font.size).style("fill", function(d) {
+                texts.append("rect").attr("width", legendFont.size).attr("height", legendFont.size).attr("x", 0).attr("y", -legendFont.size).style("fill", function(d) {
                     return d.data.color ? d.data.color : color(nodes.indexOf(d));
-                }), texts.append("text").style("font-size", font.size + "px").style("font-weight", function(d) {
-                    return font.weight ? font.weight : 600;
-                }).style("font-family", font.family).style("fill", function() {
-                    return font.color ? font.color : "#000";
+                }), texts.append("text").style("font-size", legendFont.size + "px").style("font-weight", function(d) {
+                    return legendFont.weight ? legendFont.weight : 600;
+                }).style("font-family", legendFont.family).style("fill", function() {
+                    return legendFont.color ? legendFont.color : "#000";
+                }).style("stroke", function() {
+                    return legendFont.lineColor ? legendFont.lineColor : "#000";
+                }).style("stroke-width", function() {
+                    return legendFont.lineWeight ? legendFont.lineWeight : 0;
                 }).attr("x", function(d) {
-                    return font.size + 10;
+                    return legendFont.size + 10;
                 }).attr("y", 0).text(function(d) {
                     return d.label;
                 });
@@ -13165,7 +13172,13 @@ function(module, exports, __webpack_require__) {
     exports.default = BubbleChart, BubbleChart.propTypes = {
         width: _propTypes2.default.number,
         height: _propTypes2.default.number,
-        font: _propTypes2.default.shape({
+        legendFont: _propTypes2.default.shape({
+            family: _propTypes2.default.string,
+            size: _propTypes2.default.number,
+            color: _propTypes2.default.string,
+            weight: _propTypes2.default.string
+        }),
+        valueFont: _propTypes2.default.shape({
             family: _propTypes2.default.string,
             size: _propTypes2.default.number,
             color: _propTypes2.default.string,
@@ -13174,11 +13187,19 @@ function(module, exports, __webpack_require__) {
     }, BubbleChart.defaultProps = {
         width: 1e3,
         height: 800,
-        font: {
+        legendFont: {
             family: "Arial",
             size: 12,
             color: "#000",
             weight: "bold"
+        },
+        valueFont: {
+            family: "Arial",
+            size: 24,
+            color: "#fff",
+            weight: "bold",
+            lineColor: "#3f3f3f",
+            lineWeight: 2
         }
     };
 }, /* 255 */
