@@ -5,16 +5,21 @@ ReactJS component to display data as a bubble chart using d3.
 
 As you will be able to see in [test](test/src/App.js) in order to use the component we need to importe it as:
 ```JAVASCRIPT
-import BubbleChart from 'react-bubble-chart-d3';
+import BubbleChart from '@weknow/react-bubble-chart-d3';
 ```
 
 Then, in the render method we can just call it like:
 
 ```JAVASCRIPT
 <BubbleChart
-  width={800}
+  width={1000}
   height={800}
-  fontFamily="Arial"
+  font={{
+        family: 'Arial',
+        size: 12,
+        color: '#000',
+        weight: 'bold',
+      }}
   data={[
     { label: 'CRM', value: 1 },
     { label: 'API', value: 1 },
@@ -49,6 +54,17 @@ The **data** prop receive and array of objects:
     color schema.
   */
   color: '#ff00ff',
+}
+```
+
+The **font** prop receive a configuration object to set the font-family, font-size, font-weight and color of the text:
+```javascript
+// If you don't set this prop the default configuration will be this object.
+{
+  family: 'Arial',
+  size: 12,
+  color: '#000',
+  weight: 'bold',
 }
 ```
 
