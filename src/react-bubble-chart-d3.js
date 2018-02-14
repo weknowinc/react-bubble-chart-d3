@@ -109,6 +109,12 @@ export default class BubbleChart extends Component {
       .style("fill", () => {
         return valueFont.color ? valueFont.color : '#000';
       })
+      .style("stroke", () => {
+        return valueFont.lineColor ? valueFont.lineColor : '#000';
+      })
+      .style("stroke-width", () => {
+        return valueFont.lineWeight ? valueFont.lineWeight : 0;
+      })
       .text(function(d) { return d.value; });
 
     // Center the texts inside the circles.
@@ -164,6 +170,12 @@ export default class BubbleChart extends Component {
       .style("fill", () => {
         return legendFont.color ? legendFont.color : '#000';
       })
+      .style("stroke", () => {
+        return legendFont.lineColor ? legendFont.lineColor : '#000';
+      })
+      .style("stroke-width", () => {
+        return legendFont.lineWeight ? legendFont.lineWeight : 0;
+      })
       .attr("x", (d) => { return legendFont.size + 10 })
       .attr("y", 0)
       .text((d) => { return d.label });
@@ -200,5 +212,7 @@ BubbleChart.defaultProps = {
     size: 24,
     color: '#fff',
     weight: 'bold',
+    lineColor: "#3f3f3f",
+    lineWeight: 2,
   },
 }
