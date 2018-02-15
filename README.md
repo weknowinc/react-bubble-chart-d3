@@ -12,9 +12,22 @@ Then, in the render method we can just call it like:
 
 ```JAVASCRIPT
 <BubbleChart
-  width={800}
+  width={1000}
   height={800}
-  fontFamily="Arial"
+  legendFont={{
+        family: 'Arial',
+        size: 12,
+        color: '#000',
+        weight: 'bold',
+      }}
+  valueFont={{
+        family: 'Arial',
+        size: 24,
+        color: '#fff',
+        weight: 'bold',
+        lineColor: "#3f3f3f",
+        lineWeight: 2,
+      }}
   data={[
     { label: 'CRM', value: 1 },
     { label: 'API', value: 1 },
@@ -49,6 +62,20 @@ The **data** prop receive and array of objects:
     color schema.
   */
   color: '#ff00ff',
+}
+```
+
+The **legendFont** and **valueFont** prop receive a configuration object to set the font-family, font-size, font-weight and color of the text:
+```javascript
+// If you don't set this prop the default configuration will be this object.
+{
+  family: 'Arial',
+  size: 12,
+  color: '#000',
+  weight: 'bold',
+  // lineColor and lineWeight are optionals. use only to add a border line to the text.
+  lineColor: "#3f3f3f",
+  lineWeight: 2,
 }
 ```
 
