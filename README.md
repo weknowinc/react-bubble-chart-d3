@@ -1,6 +1,10 @@
 # react-bubble-chart-d3
 ReactJS component to display data as a bubble chart using d3.
 
+### Preview
+
+![Bubble Chart D3](https://user-images.githubusercontent.com/4070505/36280823-30db442a-1261-11e8-9a5b-63786c9e31f2.png)
+
 ### General Usage
 
 As you will be able to see in [test](test/src/App.js) in order to use the component we need to importe it as:
