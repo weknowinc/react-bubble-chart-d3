@@ -42,16 +42,18 @@ export default class BubbleChart extends Component {
       data,
       height,
       width,
+      showLegend,
+      legendPercentage,
     } = this.props;
     // Reset the svg element to a empty state.
     this.svg.innerHTML = '';
 
-    const bubblesWidth = width * .8;
+    const bubblesWidth = showLegend ? width * (1 - (legendPercentage / 100)) : width;
     const legendWidth = width - bubblesWidth;
     const color = d3.scaleOrdinal(d3.schemeCategory20c);
 
     const pack = d3.pack()
-        .size([bubblesWidth, height])
+        .size([bubblesWidth * 1.1, bubblesWidth * 1.1])
         .padding(0);
 
     // Process the data to have a hierarchy structure;
@@ -69,18 +71,22 @@ export default class BubbleChart extends Component {
     const nodes = pack(root).leaves();
 
     // Call to the function that draw the bubbles.
-    this.renderBubbles(nodes, color);
+    this.renderBubbles(bubblesWidth, nodes, color);
     // Call to the function that draw the legend.
-    this.renderLegend(legendWidth, height, bubblesWidth, nodes, color);
+    if (showLegend) {
+      this.renderLegend(legendWidth, height, bubblesWidth, nodes, color);
+    }
   }
 
-  renderBubbles(nodes, color) {
+  renderBubbles(width, nodes, color) {
     const {
       data,
       valueFont,
+      labelFont,
     } = this.props;
     const bubbleChart = d3.select(this.svg).append("g")
-      .attr("class", "bubble-chart");
+      .attr("class", "bubble-chart")
+      .attr("transform", function(d) { return "translate(" + -(width * 0.05) + "," + -(width * 0.1) + ")"; });;
 
     const node = bubbleChart.selectAll(".node")
     .data(nodes)
@@ -117,6 +123,33 @@ export default class BubbleChart extends Component {
       })
       .text(function(d) { return d.value; });
 
+    node.append("text")
+      .attr("class", "label-text")
+      .style("font-size", `${labelFont.size}px`)
+      .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
+      .style("font-weight", (d) => {
+        return labelFont.weight ? labelFont.weight : 600;
+      })
+      .style("font-family", labelFont.family)
+      .style("fill", () => {
+        return labelFont.color ? labelFont.color : '#000';
+      })
+      .style("stroke", () => {
+        return labelFont.lineColor ? labelFont.lineColor : '#000';
+      })
+      .style("stroke-width", () => {
+        return labelFont.lineWeight ? labelFont.lineWeight : 0;
+      })
+      .style("opacity", function(d) {
+        // Relation % of the biggest circle
+        const relation = (100 * d.r)/nodes[0].r;
+        d.relation = relation;
+        return relation < 35 ? 0 : 1;
+      })
+      .text(function(d) {
+        return d.label;
+      });
+
     // Center the texts inside the circles.
     d3.selectAll(".value-text").attr("x", function(d) {
       const self = d3.select(this);
@@ -124,7 +157,21 @@ export default class BubbleChart extends Component {
       return -(width/2);
     })
     .attr("y", function(d) {
-      return (valueFont.size/3);
+      if (d.relation < 35) {
+        return valueFont.size / 3;
+      } else {
+        return valueFont.size * 1.05;
+      }
+    });
+
+    // Center the texts inside the circles.
+    d3.selectAll(".label-text").attr("x", function(d) {
+      const self = d3.select(this);
+      const width = self.node().getBBox().width;
+      return -(width/2);
+    })
+    .attr("y", function(d) {
+      return -labelFont.size/4
     })
 
     node.append("title")
@@ -140,7 +187,7 @@ export default class BubbleChart extends Component {
     const bubbleHeight = bubble.node().getBBox().height;
 
     const legend = d3.select(this.svg).append("g")
-      .attr("transform", function() { return `translate(${offset},${(height - bubbleHeight)/2})`; })
+      .attr("transform", function() { return `translate(${offset},${(bubbleHeight)* 0.05})`; })
       .attr("class", "legend");
 
     let textOffset = 0;
@@ -185,6 +232,8 @@ export default class BubbleChart extends Component {
 BubbleChart.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
+  showLegend: PropTypes.bool,
+  legendPercentage: PropTypes.number,
   legendFont: PropTypes.shape({
     family: PropTypes.string,
     size: PropTypes.number,
@@ -197,10 +246,18 @@ BubbleChart.propTypes = {
     color: PropTypes.string,
     weight: PropTypes.string,
   }),
+  labelFont: PropTypes.shape({
+    family: PropTypes.string,
+    size: PropTypes.number,
+    color: PropTypes.string,
+    weight: PropTypes.string,
+  }),
 }
 BubbleChart.defaultProps = {
   width: 1000,
   height: 800,
+  showLegend: true,
+  legendPercentage: 20,
   legendFont: {
     family: 'Arial',
     size: 12,
@@ -209,10 +266,14 @@ BubbleChart.defaultProps = {
   },
   valueFont: {
     family: 'Arial',
-    size: 24,
+    size: 12,
     color: '#fff',
     weight: 'bold',
-    lineColor: "#3f3f3f",
-    lineWeight: 2,
+  },
+  labelFont: {
+    family: 'Arial',
+    size: 16,
+    color: '#fff',
+    weight: 'bold',
   },
 }
