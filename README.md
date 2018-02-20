@@ -3,7 +3,7 @@ ReactJS component to display data as a bubble chart using d3.
 
 ### Preview
 
-![Bubble Chart D3](https://user-images.githubusercontent.com/4070505/36280823-30db442a-1261-11e8-9a5b-63786c9e31f2.png)
+![Bubble Chart D3](https://user-images.githubusercontent.com/4070505/36446619-834c38b0-1647-11e8-976d-9930b8a3835b.png)
 
 ### General Usage
 
@@ -18,6 +18,8 @@ Then, in the render method we can just call it like:
 <BubbleChart
   width={1000}
   height={800}
+  showLegend={true} // optional value, pass false to disable the legend.
+  legendPercentage={20} // number that represent the % of with that legend going to use.
   legendFont={{
         family: 'Arial',
         size: 12,
@@ -26,11 +28,15 @@ Then, in the render method we can just call it like:
       }}
   valueFont={{
         family: 'Arial',
-        size: 24,
+        size: 12,
         color: '#fff',
         weight: 'bold',
-        lineColor: "#3f3f3f",
-        lineWeight: 2,
+      }}
+  labelFont={{
+        family: 'Arial',
+        size: 16,
+        color: '#fff',
+        weight: 'bold',
       }}
   data={[
     { label: 'CRM', value: 1 },
@@ -69,7 +75,7 @@ The **data** prop receive and array of objects:
 }
 ```
 
-The **legendFont** and **valueFont** prop receive a configuration object to set the font-family, font-size, font-weight and color of the text:
+The **legendFont**, **valueFont** and **labelFont** prop receive a configuration object to set the font-family, font-size, font-weight and color of the text:
 ```javascript
 // If you don't set this prop the default configuration will be this object.
 {
