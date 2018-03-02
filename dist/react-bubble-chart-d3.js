@@ -140,6 +140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'renderChart',
 	    value: function renderChart() {
 	      var _props3 = this.props,
+	          graph = _props3.graph,
 	          data = _props3.data,
 	          height = _props3.height,
 	          width = _props3.width,
@@ -153,7 +154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var legendWidth = width - bubblesWidth;
 	      var color = d3.scaleOrdinal(d3.schemeCategory20c);
 
-	      var pack = d3.pack().size([bubblesWidth * 1.1, bubblesWidth * 1.1]).padding(0);
+	      var pack = d3.pack().size([bubblesWidth * graph.zoom, bubblesWidth * graph.zoom]).padding(0);
 
 	      // Process the data to have a hierarchy structure;
 	      var root = d3.hierarchy({ children: data }).sum(function (d) {
@@ -181,12 +182,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'renderBubbles',
 	    value: function renderBubbles(width, nodes, color) {
 	      var _props4 = this.props,
+	          graph = _props4.graph,
 	          data = _props4.data,
 	          valueFont = _props4.valueFont,
 	          labelFont = _props4.labelFont;
 
+
 	      var bubbleChart = d3.select(this.svg).append("g").attr("class", "bubble-chart").attr("transform", function (d) {
-	        return "translate(" + -(width * 0.05) + "," + -(width * 0.1) + ")";
+	        return "translate(" + width * graph.offsetX + "," + width * graph.offsetY + ")";
 	      });;
 
 	      var node = bubbleChart.selectAll(".node").data(nodes).enter().append("g").attr("class", "node").attr("transform", function (d) {
@@ -199,6 +202,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return d.r - d.r * .04;
 	      }).style("fill", function (d) {
 	        return d.data.color ? d.data.color : color(nodes.indexOf(d));
+	      }).style("z-index", 1).on('mouseover', function (d) {
+	        d3.select(this).attr("r", d.r * 1.04);
+	      }).on('mouseout', function (d) {
+	        var r = d.r - d.r * 0.04;
+	        d3.select(this).attr("r", r);
 	      });
 
 	      node.append("clipPath").attr("id", function (d) {
@@ -249,7 +257,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (d.relation < 35) {
 	          return valueFont.size / 3;
 	        } else {
-	          return valueFont.size * 1.05;
+	          return -valueFont.size * 0.5;
 	        }
 	      });
 
@@ -259,7 +267,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var width = self.node().getBBox().width;
 	        return -(width / 2);
 	      }).attr("y", function (d) {
-	        return -labelFont.size / 4;
+	        return labelFont.size / 2;
 	      });
 
 	      node.append("title").text(function (d) {
@@ -285,7 +293,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var offset = textOffset;
 	        textOffset += legendFont.size + 10;
 	        return 'translate(0,' + offset + ')';
-	      });
+	      }).on('mouseover', function (d) {
+	        d3.select('#' + d.id).attr("r", d.r * 1.04);
+	      }).on('mouseout', function (d) {
+	        var r = d.r - d.r * 0.04;
+	        d3.select('#' + d.id).attr("r", r);
+	      });;
+
+	      texts.append("rect").attr("width", 30).attr("height", legendFont.size).attr("x", 0).attr("y", -legendFont.size).style("fill", "transparent");
 
 	      texts.append("rect").attr("width", legendFont.size).attr("height", legendFont.size).attr("x", 0).attr("y", -legendFont.size).style("fill", function (d) {
 	        return d.data.color ? d.data.color : color(nodes.indexOf(d));
@@ -314,6 +329,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	BubbleChart.propTypes = {
+	  graph: _propTypes2.default.shape({
+	    zoom: _propTypes2.default.number,
+	    offsetX: _propTypes2.default.number,
+	    offsetY: _propTypes2.default.number
+	  }),
 	  width: _propTypes2.default.number,
 	  height: _propTypes2.default.number,
 	  showLegend: _propTypes2.default.bool,
@@ -338,6 +358,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  })
 	};
 	BubbleChart.defaultProps = {
+	  graph: {
+	    zoom: 1.1,
+	    offsetX: -0.05,
+	    offsetY: -0.01
+	  },
 	  width: 1000,
 	  height: 800,
 	  showLegend: true,
@@ -350,15 +375,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  valueFont: {
 	    family: 'Arial',
-	    size: 12,
+	    size: 16,
 	    color: '#fff',
 	    weight: 'bold'
 	  },
 	  labelFont: {
 	    family: 'Arial',
-	    size: 16,
+	    size: 11,
 	    color: '#fff',
-	    weight: 'bold'
+	    weight: 'normal'
 	  }
 	};
 

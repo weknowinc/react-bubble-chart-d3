@@ -16,6 +16,11 @@ Then, in the render method we can just call it like:
 
 ```JAVASCRIPT
 <BubbleChart
+  graph: {
+    zoom: 1.1,
+    offsetX: -0.05,
+    offsetY: -0.01,
+  },
   width={1000}
   height={800}
   showLegend={true} // optional value, pass false to disable the legend.
@@ -72,6 +77,15 @@ The **data** prop receive and array of objects:
     color schema.
   */
   color: '#ff00ff',
+}
+```
+
+The **graph** prop receive a configuration object to set the zoom and offset of the bubbles:
+```javascript
+graph: {
+  zoom: 1.1, // 1.1 means 110% of zoom.
+  offsetX: -0.05, // -0.05 means that the offset is -5% of the graph width.
+  offsetY: -0.01,
 }
 ```
 
