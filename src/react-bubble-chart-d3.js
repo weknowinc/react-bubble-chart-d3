@@ -39,6 +39,7 @@ export default class BubbleChart extends Component {
 
   renderChart() {
     const {
+      graph,
       data,
       height,
       width,
@@ -53,7 +54,7 @@ export default class BubbleChart extends Component {
     const color = d3.scaleOrdinal(d3.schemeCategory20c);
 
     const pack = d3.pack()
-        .size([bubblesWidth * 1.1, bubblesWidth * 1.1])
+        .size([bubblesWidth * graph.zoom, bubblesWidth * graph.zoom])
         .padding(0);
 
     // Process the data to have a hierarchy structure;
@@ -80,13 +81,15 @@ export default class BubbleChart extends Component {
 
   renderBubbles(width, nodes, color) {
     const {
+      graph,
       data,
       valueFont,
       labelFont,
     } = this.props;
+
     const bubbleChart = d3.select(this.svg).append("g")
       .attr("class", "bubble-chart")
-      .attr("transform", function(d) { return "translate(" + -(width * 0.05) + "," + -(width * 0.1) + ")"; });;
+      .attr("transform", function(d) { return "translate(" + (width * graph.offsetX) + "," + (width * graph.offsetY) + ")"; });;
 
     const node = bubbleChart.selectAll(".node")
     .data(nodes)
@@ -160,7 +163,7 @@ export default class BubbleChart extends Component {
       if (d.relation < 35) {
         return valueFont.size / 3;
       } else {
-        return valueFont.size * 1.05;
+        return -valueFont.size * 0.5;
       }
     });
 
@@ -171,7 +174,7 @@ export default class BubbleChart extends Component {
       return -(width/2);
     })
     .attr("y", function(d) {
-      return -labelFont.size/4
+      return labelFont.size/2
     })
 
     node.append("title")
@@ -230,6 +233,11 @@ export default class BubbleChart extends Component {
 }
 
 BubbleChart.propTypes = {
+  graph: PropTypes.shape({
+    zoom: PropTypes.number,
+    offsetX: PropTypes.number,
+    offsetY: PropTypes.number,
+  }),
   width: PropTypes.number,
   height: PropTypes.number,
   showLegend: PropTypes.bool,
@@ -254,6 +262,11 @@ BubbleChart.propTypes = {
   }),
 }
 BubbleChart.defaultProps = {
+  graph: {
+    zoom: 1.1,
+    offsetX: -0.05,
+    offsetY: -0.01,
+  },
   width: 1000,
   height: 800,
   showLegend: true,
@@ -266,14 +279,14 @@ BubbleChart.defaultProps = {
   },
   valueFont: {
     family: 'Arial',
-    size: 12,
+    size: 16,
     color: '#fff',
     weight: 'bold',
   },
   labelFont: {
     family: 'Arial',
-    size: 16,
+    size: 11,
     color: '#fff',
-    weight: 'bold',
+    weight: 'normal',
   },
 }
