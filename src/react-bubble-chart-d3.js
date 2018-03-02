@@ -100,7 +100,15 @@ export default class BubbleChart extends Component {
     node.append("circle")
       .attr("id", function(d) { return d.id; })
       .attr("r", function(d) { return d.r - (d.r * .04); })
-      .style("fill", function(d) { return d.data.color ? d.data.color : color(nodes.indexOf(d)); });
+      .style("fill", function(d) { return d.data.color ? d.data.color : color(nodes.indexOf(d)); })
+      .style("z-index", 1)
+      .on('mouseover', function(d) {
+        d3.select(this).attr("r", d.r * 1.04);
+      })
+      .on('mouseout', function(d) {
+        const r = d.r - (d.r * 0.04);
+        d3.select(this).attr("r", r);
+      });
 
     node.append("clipPath")
       .attr("id", function(d) { return "clip-" + d.id; })
@@ -202,7 +210,21 @@ export default class BubbleChart extends Component {
         const offset = textOffset;
         textOffset+= legendFont.size + 10;
         return `translate(0,${offset})`;
-      });
+      })
+      .on('mouseover', function(d) {
+        d3.select('#' + d.id).attr("r", d.r * 1.04);
+      })
+      .on('mouseout', function(d) {
+        const r = d.r - (d.r * 0.04);
+        d3.select('#' + d.id).attr("r", r);
+      });;
+
+    texts.append("rect")
+      .attr("width", 30)
+      .attr("height", legendFont.size)
+      .attr("x", 0)
+      .attr("y", -legendFont.size)
+      .style("fill", "transparent");
 
     texts.append("rect")
       .attr("width", legendFont.size)
