@@ -239,13 +239,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return labelFont.lineColor ? labelFont.lineColor : '#000';
 	      }).style("stroke-width", function () {
 	        return labelFont.lineWeight ? labelFont.lineWeight : 0;
-	      }).style("opacity", function (d) {
-	        // Relation % of the biggest circle
-	        var relation = 100 * d.r / nodes[0].r;
-	        d.relation = relation;
-	        return relation < 35 ? 0 : 1;
 	      }).text(function (d) {
 	        return d.label;
+	      });
+
+	      // Center the texts inside the circles.
+	      d3.selectAll(".label-text").attr("x", function (d) {
+	        var self = d3.select(this);
+	        var width = self.node().getBBox().width;
+	        return -(width / 2);
+	      }).style("opacity", function (d) {
+	        var self = d3.select(this);
+	        var width = self.node().getBBox().width;
+	        d.hideLabel = width * 1.05 > d.r * 2;
+	        return d.hideLabel ? 0 : 1;
+	      }).attr("y", function (d) {
+	        return labelFont.size / 2;
 	      });
 
 	      // Center the texts inside the circles.
@@ -254,20 +263,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var width = self.node().getBBox().width;
 	        return -(width / 2);
 	      }).attr("y", function (d) {
-	        if (d.relation < 35) {
+	        if (d.hideLabel) {
 	          return valueFont.size / 3;
 	        } else {
 	          return -valueFont.size * 0.5;
 	        }
-	      });
-
-	      // Center the texts inside the circles.
-	      d3.selectAll(".label-text").attr("x", function (d) {
-	        var self = d3.select(this);
-	        var width = self.node().getBBox().width;
-	        return -(width / 2);
-	      }).attr("y", function (d) {
-	        return labelFont.size / 2;
 	      });
 
 	      node.append("title").text(function (d) {
