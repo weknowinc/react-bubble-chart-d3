@@ -320,6 +320,6 @@ BubbleChart.defaultProps = {
     color: '#fff',
     weight: 'normal',
   },
-  bubbleClickFun: (node) => {console.log(`Bubble ${node.label} is clicked ...`, n)},
-  legendClickFun: (node) => {console.log(`Legend ${node.label} is clicked ...`, n)}
+  bubbleClickFun: (label) => {console.log(`Bubble ${label} is clicked ...`, n)},
+  legendClickFun: (label) => {console.log(`Legend ${label} is clicked ...`, n)}
 }

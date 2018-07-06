@@ -15,12 +15,10 @@ import BubbleChart from '@weknow/react-bubble-chart-d3';
 Then, in the render method we can just call it like:
 
 ```JAVASCRIPT
-// node object passed by `react-bubble-chart-d3`, its format looks like:
-// {data: {label: "Tonwn Planning", value: 78}, height: 0, depth: 1, id: "town-planning", label: "Town Planning", r: 30.65, value: 78, x: 308.288, y: 87.37}
-bubbleClick = (node) =>{
+bubbleClick = (label) =>{
   console.log("Custom bubble click func")
 }
-legendClick = (node) =>{
+legendClick = (label) =>{
   console.log("Customer legend click func")
 }
 <BubbleChart
