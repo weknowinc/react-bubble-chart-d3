@@ -15,12 +15,18 @@ import BubbleChart from '@weknow/react-bubble-chart-d3';
 Then, in the render method we can just call it like:
 
 ```JAVASCRIPT
+bubbleClick = (label) =>{
+  console.log("Custom bubble click func")
+}
+legendClick = (label) =>{
+  console.log("Customer legend click func")
+}
 <BubbleChart
-  graph: {
+  graph= {
     zoom: 1.1,
     offsetX: -0.05,
     offsetY: -0.01,
-  },
+  }
   width={1000}
   height={800}
   showLegend={true} // optional value, pass false to disable the legend.
@@ -43,6 +49,9 @@ Then, in the render method we can just call it like:
         color: '#fff',
         weight: 'bold',
       }}
+  //Custom bubble/legend click functions such as searching using the label, redirecting to other page
+  bubbleClickFunc={this.bubbleClick}
+  legendClickFun={this.legendClick}
   data={[
     { label: 'CRM', value: 1 },
     { label: 'API', value: 1 },

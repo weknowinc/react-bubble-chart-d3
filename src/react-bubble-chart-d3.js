@@ -83,6 +83,7 @@ export default class BubbleChart extends Component {
     const {
       graph,
       data,
+      bubbleClickFun,
       valueFont,
       labelFont,
     } = this.props;
@@ -95,7 +96,10 @@ export default class BubbleChart extends Component {
     .data(nodes)
     .enter().append("g")
       .attr("class", "node")
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      on("click", function(d) {
+        bubbleClickFun(d.label);
+    });
 
     node.append("circle")
       .attr("id", function(d) { return d.id; })
@@ -193,6 +197,7 @@ export default class BubbleChart extends Component {
   renderLegend(width, height, offset, nodes, color) {
     const {
       data,
+      legendClickFun,
       legendFont,
     } = this.props;
     const bubble = d3.select('.bubble-chart');
@@ -218,7 +223,10 @@ export default class BubbleChart extends Component {
       .on('mouseout', function(d) {
         const r = d.r - (d.r * 0.04);
         d3.select('#' + d.id).attr("r", r);
-      });;
+      })
+      .on("click", function(d) {
+        legendClickFun(d.label);
+    });;
 
     texts.append("rect")
       .attr("width", 30)
@@ -312,4 +320,6 @@ BubbleChart.defaultProps = {
     color: '#fff',
     weight: 'normal',
   },
+  bubbleClickFun: (label) => {console.log(`Bubble ${label} is clicked ...`, n)},
+  legendClickFun: (label) => {console.log(`Legend ${label} is clicked ...`, n)}
 }
