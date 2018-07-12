@@ -184,6 +184,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _props4 = this.props,
 	          graph = _props4.graph,
 	          data = _props4.data,
+	          bubbleClickFun = _props4.bubbleClickFun,
 	          valueFont = _props4.valueFont,
 	          labelFont = _props4.labelFont;
 
@@ -194,6 +195,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var node = bubbleChart.selectAll(".node").data(nodes).enter().append("g").attr("class", "node").attr("transform", function (d) {
 	        return "translate(" + d.x + "," + d.y + ")";
+	      });
+	      on("click", function (d) {
+	        bubbleClickFun(d.label);
 	      });
 
 	      node.append("circle").attr("id", function (d) {
@@ -279,6 +283,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function renderLegend(width, height, offset, nodes, color) {
 	      var _props5 = this.props,
 	          data = _props5.data,
+	          legendClickFun = _props5.legendClickFun,
 	          legendFont = _props5.legendFont;
 
 	      var bubble = d3.select('.bubble-chart');
@@ -298,6 +303,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }).on('mouseout', function (d) {
 	        var r = d.r - d.r * 0.04;
 	        d3.select('#' + d.id).attr("r", r);
+	      }).on("click", function (d) {
+	        legendClickFun(d.label);
 	      });;
 
 	      texts.append("rect").attr("width", 30).attr("height", legendFont.size).attr("x", 0).attr("y", -legendFont.size).style("fill", "transparent");
@@ -384,6 +391,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    size: 11,
 	    color: '#fff',
 	    weight: 'normal'
+	  },
+	  bubbleClickFun: function bubbleClickFun(label) {
+	    console.log('Bubble ' + label + ' is clicked ...', n);
+	  },
+	  legendClickFun: function legendClickFun(label) {
+	    console.log('Legend ' + label + ' is clicked ...', n);
 	  }
 	};
 
