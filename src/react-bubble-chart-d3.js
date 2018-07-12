@@ -97,7 +97,7 @@ export default class BubbleChart extends Component {
     .enter().append("g")
       .attr("class", "node")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-      on("click", function(d) {
+      .on("click", function(d) {
         bubbleClickFun(d.label);
     });
 
@@ -320,6 +320,6 @@ BubbleChart.defaultProps = {
     color: '#fff',
     weight: 'normal',
   },
-  bubbleClickFun: (label) => {console.log(`Bubble ${label} is clicked ...`, n)},
-  legendClickFun: (label) => {console.log(`Legend ${label} is clicked ...`, n)}
+  bubbleClickFun: (label) => {console.log(`Bubble ${label} is clicked ...`)},
+  legendClickFun: (label) => {console.log(`Legend ${label} is clicked ...`)}
 }
