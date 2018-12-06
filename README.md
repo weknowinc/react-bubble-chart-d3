@@ -50,7 +50,7 @@ legendClick = (label) =>{
         weight: 'bold',
       }}
   //Custom bubble/legend click functions such as searching using the label, redirecting to other page
-  bubbleClickFunc={this.bubbleClick}
+  bubbleClickFun={this.bubbleClick}
   legendClickFun={this.legendClick}
   data={[
     { label: 'CRM', value: 1 },
