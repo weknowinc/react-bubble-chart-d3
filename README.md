@@ -22,11 +22,11 @@ legendClick = (label) =>{
   console.log("Customer legend click func")
 }
 <BubbleChart
-  graph= {
+  graph= {{
     zoom: 1.1,
     offsetX: -0.05,
     offsetY: -0.01,
-  }
+  }}
   width={1000}
   height={800}
   showLegend={true} // optional value, pass false to disable the legend.
