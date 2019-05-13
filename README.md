@@ -29,6 +29,7 @@ legendClick = (label) =>{
   }}
   width={1000}
   height={800}
+  padding={0} // optional value, number that set the padding between bubbles
   showLegend={true} // optional value, pass false to disable the legend.
   legendPercentage={20} // number that represent the % of with that legend going to use.
   legendFont={{
