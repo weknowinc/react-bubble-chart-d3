@@ -43,6 +43,7 @@ export default class BubbleChart extends Component {
       data,
       height,
       width,
+      padding,
       showLegend,
       legendPercentage,
     } = this.props;
@@ -55,7 +56,7 @@ export default class BubbleChart extends Component {
 
     const pack = d3.pack()
         .size([bubblesWidth * graph.zoom, bubblesWidth * graph.zoom])
-        .padding(0);
+        .padding(padding);
 
     // Process the data to have a hierarchy structure;
     const root = d3.hierarchy({children: data})
@@ -271,6 +272,7 @@ BubbleChart.propTypes = {
   }),
   width: PropTypes.number,
   height: PropTypes.number,
+  padding: PropTypes.number,
   showLegend: PropTypes.bool,
   legendPercentage: PropTypes.number,
   legendFont: PropTypes.shape({
@@ -300,6 +302,7 @@ BubbleChart.defaultProps = {
   },
   width: 1000,
   height: 800,
+  padding: 0,
   showLegend: true,
   legendPercentage: 20,
   legendFont: {
