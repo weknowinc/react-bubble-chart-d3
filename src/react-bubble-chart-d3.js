@@ -39,6 +39,7 @@ export default class BubbleChart extends Component {
 
   renderChart() {
     const {
+      overflow,
       graph,
       data,
       height,
@@ -49,6 +50,9 @@ export default class BubbleChart extends Component {
     } = this.props;
     // Reset the svg element to a empty state.
     this.svg.innerHTML = '';
+    // Allow bubbles overflowing its SVG container in visual aspect if props(overflow) is true.
+    if(overflow)
+      this.svg.style.overflow = "visible";
 
     const bubblesWidth = showLegend ? width * (1 - (legendPercentage / 100)) : width;
     const legendWidth = width - bubblesWidth;
@@ -265,6 +269,7 @@ export default class BubbleChart extends Component {
 }
 
 BubbleChart.propTypes = {
+  overflow: PropTypes.bool,
   graph: PropTypes.shape({
     zoom: PropTypes.number,
     offsetX: PropTypes.number,
@@ -295,6 +300,7 @@ BubbleChart.propTypes = {
   }),
 }
 BubbleChart.defaultProps = {
+  overflow: false,
   graph: {
     zoom: 1.1,
     offsetX: -0.05,
