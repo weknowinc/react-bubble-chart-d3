@@ -99,6 +99,12 @@ graph: {
 }
 ```
 
+The **overflow** prop receive a boolean value if you want to make bubbles visible beyond its SVG element bounday.
+The default value is set to 'false':
+```javascript
+overflow={true}
+```
+
 The **legendFont**, **valueFont** and **labelFont** prop receive a configuration object to set the font-family, font-size, font-weight and color of the text:
 ```javascript
 // If you don't set this prop the default configuration will be this object.
