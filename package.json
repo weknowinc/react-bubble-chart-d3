@@ -29,9 +29,13 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "parcel build"
+    "build": "parcel build",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "parcel": "^2.8.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
