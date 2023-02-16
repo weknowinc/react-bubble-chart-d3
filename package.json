@@ -16,7 +16,9 @@
     "type": "git",
     "url": "https://github.com/TestBoxLab/react-bubble-chart-d3"
   },
+  "source": "src/index.js",
   "main": "lib/index.js",
+  "module": "lib/module.js",
   "peerDependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
@@ -27,12 +29,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:lib && npm run build:dist",
-    "build:lib": "react-build-lib",
-    "build:dist": "react-build-dist --bundle-name react-bubble-chart-d3.js"
+    "build": "parcel build"
   },
   "devDependencies": {
-    "react-build-dist": "0.0.8",
-    "react-build-lib": "0.0.2"
+    "parcel": "^2.8.3"
   }
 }
