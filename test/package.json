@@ -6,7 +6,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "1.1.0",
-    "react-bubble-chart-d3": "../lib"
+    "react-bubble-chart-d3": "../"
   },
   "scripts": {
     "start": "react-scripts start",
