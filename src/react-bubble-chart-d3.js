@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
@@ -10,10 +10,10 @@ export default class BubbleChart extends Component {
     this.renderChart = this.renderChart.bind(this);
     this.renderBubbles = this.renderBubbles.bind(this);
     this.renderLegend = this.renderLegend.bind(this);
+    this.svg = createRef();
   }
 
   componentDidMount() {
-    this.svg = ReactDOM.findDOMNode(this);
     this.renderChart();
   }
 
@@ -33,7 +33,7 @@ export default class BubbleChart extends Component {
       height,
     } = this.props;
     return (
-      <svg width={width} height={height} />
+      <svg width={width} height={height} ref={this.svg} />
     )
   }
 
@@ -49,10 +49,10 @@ export default class BubbleChart extends Component {
       legendPercentage,
     } = this.props;
     // Reset the svg element to a empty state.
-    this.svg.innerHTML = '';
+    this.svg.current.innerHTML = '';
     // Allow bubbles overflowing its SVG container in visual aspect if props(overflow) is true.
     if(overflow)
-      this.svg.style.overflow = "visible";
+      this.svg.current.style.overflow = "visible";
 
     const bubblesWidth = showLegend ? width * (1 - (legendPercentage / 100)) : width;
     const legendWidth = width - bubblesWidth;
@@ -93,7 +93,7 @@ export default class BubbleChart extends Component {
       labelFont,
     } = this.props;
 
-    const bubbleChart = d3.select(this.svg).append("g")
+    const bubbleChart = d3.select(this.svg.current).append("g")
       .attr("class", "bubble-chart")
       .attr("transform", function(d) { return "translate(" + (width * graph.offsetX) + "," + (width * graph.offsetY) + ")"; });;
 
@@ -208,7 +208,7 @@ export default class BubbleChart extends Component {
     const bubble = d3.select('.bubble-chart');
     const bubbleHeight = bubble.node().getBBox().height;
 
-    const legend = d3.select(this.svg).append("g")
+    const legend = d3.select(this.svg.current).append("g")
       .attr("transform", function() { return `translate(${offset},${(bubbleHeight)* 0.05})`; })
       .attr("class", "legend");
 
