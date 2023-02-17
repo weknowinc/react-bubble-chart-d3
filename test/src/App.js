@@ -29,7 +29,6 @@ class App extends Component {
             { label: "AI", value: 5 },
           ]}
           showLegend={false}
-          overflow={true}
           graph={{
             zoom: 0.8,
             offsetX: 2,

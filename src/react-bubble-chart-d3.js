@@ -38,6 +38,7 @@ export default class BubbleChart extends Component {
       width,
       padding,
       showLegend,
+      showValue,
       legendPercentage,
     } = this.props;
     // Reset the svg element to a empty state.
@@ -76,14 +77,7 @@ export default class BubbleChart extends Component {
     const nodes = pack(root).leaves();
 
     // Call to the function that draw the bubbles.
-    this.renderBubbles(
-      width,
-      height,
-      width * graph.zoom,
-      height * graph.zoom,
-      nodes,
-      color
-    );
+    this.renderBubbles(bubblesWidth, height, nodes, color);
     // Call to the function that draw the legend.
     if (showLegend) {
       this.renderLegend(
@@ -97,8 +91,9 @@ export default class BubbleChart extends Component {
     }
   }
 
-  renderBubbles(width, height, bubblesWidth, bubblesHeight, nodes, color) {
-    const { graph, data, bubbleClickFun, valueFont, labelFont } = this.props;
+  renderBubbles(width, height, nodes, color) {
+    const { graph, data, bubbleClickFun, valueFont, labelFont, showValue } =
+      this.props;
 
     const bubbleChart = d3
       .select(this.svg.current)
@@ -107,9 +102,9 @@ export default class BubbleChart extends Component {
       .attr("transform", function (d) {
         return (
           "translate(" +
-          (width - bubblesWidth) / 2 +
+          (width - width * graph.zoom) / 2 +
           "," +
-          (height - bubblesHeight) / 2 +
+          (height - height * graph.zoom) / 2 +
           ")"
         );
       });
@@ -139,14 +134,6 @@ export default class BubbleChart extends Component {
         return d.data.color ? d.data.color : color(nodes.indexOf(d));
       })
       .style("z-index", 1);
-    //We don't want the bubble to expand/shrink
-    // .on("mouseover", function (d) {
-    //   d3.select(this).attr("r", d.r * 1.04);
-    // })
-    // .on("mouseout", function (d) {
-    //   const r = d.r - d.r * 0.04;
-    //   d3.select(this).attr("r", r);
-    // });
 
     node
       .append("clipPath")
@@ -158,30 +145,31 @@ export default class BubbleChart extends Component {
         return "#" + d.id;
       });
 
-    //Currently we don't want to show the value in the bubble
-    // node
-    //   .append("text")
-    //   .attr("class", "value-text")
-    //   .style("font-size", `${valueFont.size}px`)
-    //   .attr("clip-path", function (d) {
-    //     return "url(#clip-" + d.id + ")";
-    //   })
-    //   .style("font-weight", (d) => {
-    //     return valueFont.weight ? valueFont.weight : 600;
-    //   })
-    //   .style("font-family", valueFont.family)
-    //   .style("fill", () => {
-    //     return valueFont.color ? valueFont.color : "#000";
-    //   })
-    //   .style("stroke", () => {
-    //     return valueFont.lineColor ? valueFont.lineColor : "#000";
-    //   })
-    //   .style("stroke-width", () => {
-    //     return valueFont.lineWeight ? valueFont.lineWeight : 0;
-    //   })
-    //   .text(function (d) {
-    //     return d.value;
-    //   });
+    if (showValue) {
+      node
+        .append("text")
+        .attr("class", "value-text")
+        .style("font-size", `${valueFont.size}px`)
+        .attr("clip-path", function (d) {
+          return "url(#clip-" + d.id + ")";
+        })
+        .style("font-weight", (d) => {
+          return valueFont.weight ? valueFont.weight : 600;
+        })
+        .style("font-family", valueFont.family)
+        .style("fill", () => {
+          return valueFont.color ? valueFont.color : "#000";
+        })
+        .style("stroke", () => {
+          return valueFont.lineColor ? valueFont.lineColor : "#000";
+        })
+        .style("stroke-width", () => {
+          return valueFont.lineWeight ? valueFont.lineWeight : 0;
+        })
+        .text(function (d) {
+          return d.value;
+        });
+    }
 
     node
       .append("text")
