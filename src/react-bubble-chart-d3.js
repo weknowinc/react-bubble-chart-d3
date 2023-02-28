@@ -40,6 +40,7 @@ export default class BubbleChart extends Component {
       showLegend,
       showValue,
       legendPercentage,
+      charsBeforeSplit,
     } = this.props;
     // Reset the svg element to a empty state.
     this.svg.current.innerHTML = "";
@@ -80,20 +81,40 @@ export default class BubbleChart extends Component {
     this.renderBubbles(bubblesWidth, height, nodes, color);
     // Call to the function that draw the legend.
     if (showLegend) {
-      this.renderLegend(
-        legendWidth,
-        height,
-        bubblesWidth,
-        bubblesHeight,
-        nodes,
-        color
-      );
+      this.renderLegend(legendWidth, height, bubblesWidth, nodes, color);
     }
   }
 
   renderBubbles(width, height, nodes, color) {
-    const { graph, data, bubbleClickFun, valueFont, labelFont, showValue } =
-      this.props;
+    const {
+      graph,
+      data,
+      bubbleClickFun,
+      valueFont,
+      labelFont,
+      showValue,
+      charsBeforeSplit,
+    } = this.props;
+
+    const splitByFirstSpace = (str) => {
+      const index = str.indexOf(" ");
+      if (index === -1 || str.length <= charsBeforeSplit) {
+        return [str];
+      } else {
+        return [str.slice(0, index), str.slice(index + 1)];
+      }
+    };
+
+    var insertLinebreaks = function (d) {
+      var text = d3.select(this);
+      var words = splitByFirstSpace(text.text());
+      text.text("");
+
+      for (var i = 0; i < words.length; i++) {
+        var tspan = text.append("tspan").text(words[i]);
+        if (i >= 0) tspan.attr("x", 0).attr("dy", "15");
+      }
+    };
 
     const bubbleChart = d3
       .select(this.svg.current)
@@ -174,6 +195,8 @@ export default class BubbleChart extends Component {
     node
       .append("text")
       .attr("class", "label-text")
+      .attr("text-anchor", "middle")
+      .attr("dominant-baseline", "middle")
       .style("font-size", `${labelFont.size}px`)
       .attr("clip-path", function (d) {
         return "url(#clip-" + d.id + ")";
@@ -193,7 +216,8 @@ export default class BubbleChart extends Component {
       })
       .text(function (d) {
         return d.label;
-      });
+      })
+      .each(insertLinebreaks);
 
     // Center the texts inside the circles.
     d3.selectAll(".label-text")
@@ -209,7 +233,9 @@ export default class BubbleChart extends Component {
         return d.hideLabel ? 0 : 1;
       })
       .attr("y", function (d) {
-        return labelFont.size / 2;
+        const self = d3.select(this);
+        const height = self.node().getBBox().height;
+        return -(height / 2 + 10);
       });
 
     // Center the texts inside the circles.

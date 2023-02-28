@@ -18,22 +18,26 @@ class App extends Component {
         </h1>
         <br />
         <BubbleChart
-          width={500}
-          height={500}
+          width={450}
+          height={450}
           fontFamily="Arial"
           data={[
-            { label: "CRM", value: 1 },
-            { label: "API", value: 2 },
-            { label: "Data", value: 3 },
-            { label: "Commerce", value: 4 },
-            { label: "AI", value: 5 },
+            {
+              label: `Line Chart`,
+              value: 1,
+            },
+            { label: "Line Chart Okay", value: 2 },
+            { label: "Service Level Agreements", value: 3 },
+            { label: "AGH", value: 4 },
+            { label: "plsworkgoddamn", value: 5 },
           ]}
           showLegend={false}
           graph={{
-            zoom: 0.8,
+            zoom: 1,
             offsetX: 2,
             offsety: 2,
           }}
+          charsBeforeSplit={12}
         />
       </div>
     );
